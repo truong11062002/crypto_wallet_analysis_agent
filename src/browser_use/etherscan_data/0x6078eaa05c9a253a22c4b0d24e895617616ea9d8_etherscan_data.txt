@@ -1,0 +1,5 @@
+Wallet Address: 0x6078eaa05c9a253a22c4b0d24e895617616ea9d8
+
+--- Final Result ---
+I have extracted the token holdings, their USD values, and the total portfolio USD value. The asset percentage distribution is also available. I have also extracted the NFT holdings. The total value is $106,283.65 (245 Tokens) + $1,552.96 (ETH)
+--- Errors ---

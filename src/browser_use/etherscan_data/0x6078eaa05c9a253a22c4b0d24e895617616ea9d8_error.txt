@@ -1,0 +1,5 @@
+Error scraping address 0x6078eaa05c9a253a22c4b0d24e895617616ea9d8: write() argument must be str, not list
+Traceback (most recent call last):
+  File "/home/truongnn/interview/ather_labs/web-ui/scraper_wallet_addresses.py", line 94, in scrape_etherscan_address
+    f.write(errors if errors else "No errors.\n")
+TypeError: write() argument must be str, not list
