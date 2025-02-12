@@ -1,7 +1,7 @@
 import asyncio
 import os
 from dotenv import load_dotenv
-
+import argparse
 from browser_use.agent.service import Agent
 from browser_use.browser.browser import Browser, BrowserConfig
 from browser_use.browser.context import BrowserContextConfig, BrowserContextWindowSize
@@ -113,6 +113,22 @@ class EtherscanScraper:
 
 
 async def main():
+
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Etherscan Scraper")
+    parser.add_argument(
+        "prompt",
+        choices=[
+            "PROMPT_WALLET_ADDRESS",
+            "WALLET_AGE",
+            "TRANSACTIONS_PROMPT",
+            "TREND_PROMPT",
+            "BEHAVIOR_PROMPT",
+        ],
+        help="The prompt to use for scraping",
+    )
+    args = parser.parse_args()
+
     wallet_addresses = open("wallet_addresses.txt", "r").read().splitlines()
     output_directory = "etherscan_wallet_behavior"
     api_key = os.getenv("OPENAI_API_KEY")
@@ -121,11 +137,15 @@ async def main():
     scraper = EtherscanScraper(wallet_addresses, output_directory, api_key)
 
     # Run the desired scraper method
-    # await scraper.run_scraper(TREND_PROMPT)
-    # await scraper.run_scraper(PROMPT_WALLET_ADDRESS)
-    # await scraper.run_scraper(WALLET_AGE)
-    # await scraper.run_scraper(TRANSACTIONS_PROMPT)
-    await scraper.run_scraper(BEHAVIOR_PROMPT)
+    prompt_mapping = {
+        "PROMPT_WALLET_ADDRESS": PROMPT_WALLET_ADDRESS,
+        "WALLET_AGE": WALLET_AGE,
+        "TRANSACTIONS_PROMPT": TRANSACTIONS_PROMPT,
+        "TREND_PROMPT": TREND_PROMPT,
+        "BEHAVIOR_PROMPT": BEHAVIOR_PROMPT,
+    }
+    prompt = prompt_mapping[args.prompt]
+    await scraper.run_scraper(prompt)
 
 
 if __name__ == "__main__":
