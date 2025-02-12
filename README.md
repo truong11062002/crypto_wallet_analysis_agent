@@ -29,8 +29,8 @@ A comprehensive tool for analyzing Ethereum wallet behavior, transactions, and p
 1. Clone the repository:
 
 ```bash
-git clone [repository-url]
-cd crypto-wallet-analysis-agent
+git clone https://github.com/truong11062002/crypto_wallet_analysis_agent.git
+cd crypto_wallet_analysis_agent
 ```
 
 2. Create and activate a virtual environment:
@@ -66,8 +66,6 @@ cp .env.example .env
 ```
 OPENAI_API_KEY=your_api_key_here
 GOOGLE_API_KEY=your_api_key_here
-CHROME_PATH=/path/to/chrome  # Optional, for custom browser
-CHROME_USER_DATA=/path/to/user/data  # Optional, for persistent sessions
 ```
 
 ## Usage Examples
@@ -146,8 +144,8 @@ browser = CustomBrowser(
     config=BrowserConfig(
         headless=False,
         disable_security=True,
-        chrome_instance_path="/path/to/chrome",
-        extra_chromium_args=["--window-size=1920,1080"]
+        chrome_instance_path="/path/to/chrome", # Optional
+        extra_chromium_args=["--window-size=1920,1080"] # Optional
     )
 )
 ```
