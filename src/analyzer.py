@@ -75,6 +75,20 @@ class EthereumWalletAnalyzer:
                 "Make sure all numbers are properly formatted with appropriate decimals.",
             ],
         )
+        self.agent_behavior = Agent(
+            model=OpenAIChat(id="gpt-4o"),
+            description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
+            instructions=[
+                "Extract and format wallet data into clear sections:",
+                "Classification: [Bot/Human/Uncertain]",
+                "Confidence Level: [High/Medium/Low]",
+                "Key Indicators:",
+                "- [List key factors supporting classification]",
+                "- [List any contradicting factors]",
+                "Analysis: [Brief explanation of conclusion]",
+                "Make sure all numbers are properly formatted with appropriate decimals.",
+            ],
+        )
 
     def read_wallet_data(self, file_path: Path) -> str:
         """Read wallet data from a text file."""
@@ -166,6 +180,22 @@ class EthereumWalletAnalyzer:
         Make sure all numbers are properly formatted with appropriate decimals.
         """
         response = self.agent_transactions.run(prompt)
+        return response.content if response.content else "No analysis available"
+
+    def analyze_wallets_behavior(self, wallet_address: str) -> str:
+        """Analyze wallet behavior using the agent."""
+        prompt = f"""
+        Analyze the trend of {wallet_address} using the following information:
+        
+        Classification: [Bot/Human/Uncertain]
+        Confidence Level: [High/Medium/Low]
+        Key Indicators:
+        - [List key factors supporting classification]
+        - [List any contradicting factors]
+        Analysis: [Brief explanation of conclusion]
+        Make sure all numbers are properly formatted with appropriate decimals.
+        """
+        response = self.agent_behavior.run(prompt)
         return response.content if response.content else "No analysis available"
 
     def analyze_all_wallets(self) -> Dict[str, str]:
