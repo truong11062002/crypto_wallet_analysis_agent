@@ -1,7 +1,7 @@
 import asyncio
 from pathlib import Path
 from typing import List
-
+import argparse
 from src.analyzer import EthereumWalletAnalyzer
 
 
@@ -93,12 +93,28 @@ async def analyze_wallets(
 
 async def main():
     """Main entry point for the wallet analysis program."""
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Ethereum Wallet Analysis")
+    parser.add_argument("--analyze-age", action="store_true", help="Analyze wallet age")
+    parser.add_argument(
+        "--analyze-trend", action="store_true", help="Analyze wallet trend"
+    )
+    parser.add_argument(
+        "--analyze-transactions",
+        action="store_true",
+        help="Analyze wallet transactions",
+    )
+    parser.add_argument(
+        "--analyze-behavior", action="store_true", help="Analyze wallet behavior"
+    )
+    args = parser.parse_args()
 
     # Configuration
-    analyze_age = False
-    analyze_trend = False
-    analyze_transactions = False
-    analyze_behavior = True
+    analyze_age = args.analyze_age
+    analyze_trend = args.analyze_trend
+    analyze_transactions = args.analyze_transactions
+    analyze_behavior = args.analyze_behavior
+
     WALLET_FILE = "src/browser_use/wallet_addresses.txt"
     OUTPUT_DIR = {
         (True, False, False, False): "data/wallet_age_analysis",
