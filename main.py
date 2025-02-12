@@ -22,15 +22,17 @@ async def analyze_wallets(
     addresses: List[str],
     output_dir: str = "data/wallet_analysis",
     analyze_age: bool = False,
+    analyze_trend: bool = False,
 ):
     """Analyze multiple wallet addresses."""
 
     # Initialize analyzer
-    data_dir = (
-        "src/browser_use/etherscan_wallet_age"
-        if analyze_age
-        else "src/browser_use/etherscan_data"
-    )
+    data_dir = {
+        (True, False): "src/browser_use/etherscan_wallet_age",
+        (False, True): "src/browser_use/etherscan_wallet_trend",
+        (False, False): "src/browser_use/etherscan_data",
+    }.get((analyze_age, analyze_trend), "src/browser_use/etherscan_data")
+
     analyzer = EthereumWalletAnalyzer(data_dir=data_dir)
 
     # Create output directory if it doesn't exist
@@ -46,11 +48,13 @@ async def analyze_wallets(
             data_file = Path(f"{data_dir}/{address}_etherscan_data.txt")
             data = analyzer.read_wallet_data(data_file)
             if data:
-                analysis = (
-                    analyzer.analyze_wallets_age(data)
-                    if analyze_age
-                    else analyzer.analyze_single_wallet(data)
-                )
+                match (analyze_age, analyze_trend):
+                    case (True, False):
+                        analysis = analyzer.analyze_wallets_age(data)
+                    case (False, True):
+                        analysis = analyzer.analyze_wallets_trend(data)
+                    case (False, False):
+                        analysis = analyzer.analyze_single_wallet(data)
                 results[address] = analysis
                 print(f"Analysis complete for {address}")
             else:
@@ -75,8 +79,14 @@ async def main():
     """Main entry point for the wallet analysis program."""
 
     # Configuration
+    analyze_age = False
+    analyze_trend = True
     WALLET_FILE = "src/browser_use/wallet_addresses.txt"
-    OUTPUT_DIR = "data/wallet_age_analysis"
+    OUTPUT_DIR = {
+        (True, False): "data/wallet_age_analysis",
+        (False, True): "data/wallet_trend_analysis",
+        (False, False): "data/wallet_analysis",
+    }.get((analyze_age, analyze_trend), "data/wallet_analysis")
 
     print("Starting Ethereum Wallet Analysis...")
 
@@ -89,7 +99,9 @@ async def main():
     print(f"Found {len(addresses)} wallet addresses to analyze")
 
     # Run analysis
-    await analyze_wallets(addresses, OUTPUT_DIR, analyze_age=True)
+    await analyze_wallets(
+        addresses, OUTPUT_DIR, analyze_age=analyze_age, analyze_trend=analyze_trend
+    )
 
     print("\nAnalysis complete!")
 

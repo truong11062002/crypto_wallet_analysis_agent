@@ -29,7 +29,7 @@ class EthereumWalletAnalyzer:
             markdown=True,
         )
 
-        # TODO: Agent that uses structured outputs
+        # TODO: Agent that uses structured outputs to improve quality
         self.agent_wallet_age = Agent(
             model=OpenAIChat(id="gpt-4o"),
             description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
@@ -39,6 +39,24 @@ class EthereumWalletAnalyzer:
                 "Wallet Age: X years, Y months, Z days",
                 "Category: [Category]",
                 "Analysis: [Brief interpretation]",
+                "Make sure all numbers are properly formatted with appropriate decimals.",
+            ],
+        )
+        self.agent_trend = Agent(
+            model=OpenAIChat(id="gpt-4o"),
+            description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
+            instructions=[
+                "Extract and format wallet data into clear sections:",
+                "30-Day Trend:",
+                "- Overall change: [increase/decrease/stable]",
+                "- Notable changes: [List significant changes]",
+                "90-Day Trend:",
+                "- Overall change: [increase/decrease/stable]",
+                "- Notable changes: [List significant changes]",
+                "180-Day Trend:",
+                "- Overall change: [increase/decrease/stable]",
+                "- Notable changes: [List significant changes]",
+                "Conclusion: [Interpretation of holder's strategy]",
                 "Make sure all numbers are properly formatted with appropriate decimals.",
             ],
         )
@@ -92,6 +110,28 @@ class EthereumWalletAnalyzer:
         """
 
         response = self.agent_wallet_age.run(prompt)
+        return response.content if response.content else "No analysis available"
+
+    def analyze_wallets_trend(self, wallet_address: str) -> str:
+        """Analyze wallet trend using the agent."""
+        prompt = f"""
+        Analyze the trend of {wallet_address} using the following information:
+        30-Day Trend:
+        - Overall change: [increase/decrease/stable]
+        - Notable changes: [List significant changes]
+
+        90-Day Trend:
+        - Overall change: [increase/decrease/stable]
+        - Notable changes: [List significant changes]
+
+        180-Day Trend:
+        - Overall change: [increase/decrease/stable]
+        - Notable changes: [List significant changes]
+
+        Conclusion: [Interpretation of holder's strategy]
+        Make sure all numbers are properly formatted with appropriate decimals.
+        """
+        response = self.agent_trend.run(prompt)
         return response.content if response.content else "No analysis available"
 
     def analyze_all_wallets(self) -> Dict[str, str]:
