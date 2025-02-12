@@ -13,7 +13,7 @@ class EthereumWalletAnalyzer:
         self.data_dir = Path(data_dir)
 
         # Initialize the agent with specific instructions for analyzing wallet data
-        # TODO: Agent that uses structured outputs
+        # TODO: Agent that uses structured outputs to improve quality
         self.agent = Agent(
             model=OpenAIChat(id="gpt-4o"),
             description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
@@ -29,7 +29,6 @@ class EthereumWalletAnalyzer:
             markdown=True,
         )
 
-        # TODO: Agent that uses structured outputs to improve quality
         self.agent_wallet_age = Agent(
             model=OpenAIChat(id="gpt-4o"),
             description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
@@ -57,6 +56,22 @@ class EthereumWalletAnalyzer:
                 "- Overall change: [increase/decrease/stable]",
                 "- Notable changes: [List significant changes]",
                 "Conclusion: [Interpretation of holder's strategy]",
+                "Make sure all numbers are properly formatted with appropriate decimals.",
+            ],
+        )
+        self.agent_transactions = Agent(
+            model=OpenAIChat(id="gpt-4o"),
+            description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
+            instructions=[
+                "Extract and format wallet data into clear sections:",
+                "Average Transaction Size: $X (Classification: [Size Category])",
+                "Total 30-Day Volume: $Y (X% of total wallet value)",
+                "Top Assets in Transactions:",
+                "1. Asset A: X% (Direction: [Pattern])",
+                "2. Asset B: Y% (Direction: [Pattern])",
+                "3. Asset C: Z% (Direction: [Pattern])",
+                "Average Daily Transactions: X",
+                "Analysis: [Interpretation of behavior]",
                 "Make sure all numbers are properly formatted with appropriate decimals.",
             ],
         )
@@ -132,6 +147,25 @@ class EthereumWalletAnalyzer:
         Make sure all numbers are properly formatted with appropriate decimals.
         """
         response = self.agent_trend.run(prompt)
+        return response.content if response.content else "No analysis available"
+
+    def analyze_wallets_transactions(self, wallet_address: str) -> str:
+        """Analyze wallet transactions using the agent."""
+        prompt = f"""
+        Analyze the trend of {wallet_address} using the following information:
+        Average Transaction Size: $X (Classification: [Size Category])
+        Total 30-Day Volume: $Y (X% of total wallet value)
+
+        Top Assets in Transactions:
+        1. Asset A: X% (Direction: [Pattern])
+        2. Asset B: Y% (Direction: [Pattern])
+        3. Asset C: Z% (Direction: [Pattern])
+
+        Average Daily Transactions: X
+        Analysis: [Interpretation of behavior]
+        Make sure all numbers are properly formatted with appropriate decimals.
+        """
+        response = self.agent_transactions.run(prompt)
         return response.content if response.content else "No analysis available"
 
     def analyze_all_wallets(self) -> Dict[str, str]:

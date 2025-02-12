@@ -114,9 +114,10 @@ class EtherscanScraper:
 
 async def main():
     wallet_addresses = open("wallet_addresses.txt", "r").read().splitlines()
-    output_directory = "etherscan_behavior_data"
+    output_directory = "etherscan_wallet_behavior"
     api_key = os.getenv("OPENAI_API_KEY")
 
+    # TODO: Apply logging for each scraper to improve prompts
     scraper = EtherscanScraper(wallet_addresses, output_directory, api_key)
 
     # Run the desired scraper method
