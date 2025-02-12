@@ -1,76 +1,57 @@
-# Crypto Wallet Analysis Agent
+# Crypto Wallet Analysis Agent 🔍
 
-A comprehensive tool for analyzing Ethereum wallet behavior, transactions, and patterns using automated browser interactions and AI-powered analysis.
+<div align="center">
 
-## Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
-- Automated wallet data collection from Etherscan
-- AI-powered analysis of wallet behavior patterns
-- Multiple analysis modes:
-  - Basic portfolio analysis
-  - Wallet age analysis
-  - Transaction pattern analysis
-  - Behavioral analysis (bot vs human detection)
+</div>
+
+An AI-powered tool for analyzing Ethereum wallet behavior, transactions, and patterns. Combines browser automation with advanced LLM capabilities to provide comprehensive wallet analysis.
+
+## ✨ Features
+
+- 🤖 **AI-Powered Analysis**: Uses advanced LLMs for pattern recognition and behavior analysis
+- 🔄 **Multiple Analysis Modes**:
+  - Portfolio composition and value
+  - Wallet age and history
+  - Transaction patterns
+  - Behavioral analysis (bot vs human)
   - Trend analysis
-- Support for multiple LLM providers (OpenAI, Google, Anthropic, DeepSeek, etc.)
-- Browser automation with persistent session support
-- Customizable browser settings and configurations
+- 🌐 **Multi-Provider Support**: Compatible with:
+  - OpenAI (GPT-4, GPT-3.5)
+  - Google (Gemini)
+  - Anthropic (Claude)
+  - DeepSeek
+  - Ollama (local models)
+- 🎯 **Browser Automation**: Seamless data collection with persistent sessions
+- 📊 **Custom Analysis**: Extensible framework for specialized analysis
 
-## Setup Instructions
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.11 or higher
-- Chrome browser (for web automation)
-- API keys for LLM providers (OpenAI, Google, etc.)
-
-### Installation
-
-1. Clone the repository:
-
 ```bash
+# Requires Python 3.11+
+python --version  # Should be 3.11 or higher
+
+# Clone repository
 git clone https://github.com/truong11062002/crypto_wallet_analysis_agent.git
 cd crypto_wallet_analysis_agent
-```
 
-2. Create and activate a virtual environment:
-
-```bash
+# Create virtual environment
 python -m venv venv
-# On Windows
-venv\Scripts\activate
-# On Unix or MacOS
-source venv/bin/activate
-```
+source venv/bin/activate  # On Unix/macOS
+venv\Scripts\activate  # On Windows
 
-3. Install dependencies:
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
-4. Install Playwright for browser automation:
-
-```bash
+# Install Playwright
 playwright install
 ```
 
-5. Create configuration file:
-
-```bash
-cp .env.example .env
-```
-
-6. Configure your environment variables in `.env`:
-
-```
-OPENAI_API_KEY=your_api_key_here
-GOOGLE_API_KEY=your_api_key_here
-```
-
-## Usage Examples
-
-### Basic Wallet Analysis
+### Basic Usage
 
 ```python
 from src.analyzer import EthereumWalletAnalyzer
@@ -79,62 +60,54 @@ from src.analyzer import EthereumWalletAnalyzer
 analyzer = EthereumWalletAnalyzer()
 
 # Analyze a single wallet
-analysis = analyzer.analyze_single_wallet(wallet_data)
+results = analyzer.analyze_single_wallet(wallet_data)
 
-# Analyze multiple wallets
-results = analyzer.analyze_all_wallets()
+# Save analysis results
 analyzer.save_analysis(results, "analysis_results")
 ```
 
-### Running Automated Analysis
+### Configuration
 
-```python
-# Using the command line
-python main.py
+Create a `.env` file:
 
-# With specific analysis modes
-python main.py --analyze-age
-python main.py --analyze-transactions
-python main.py --analyze-behavior
+```bash
+# Copy example configuration
+cp .env.example .env
+
+# Edit with your settings
+OPENAI_API_KEY=your_key_here
+GOOGLE_API_KEY=your_key_here
 ```
 
-### Scraping Ethereum Data
+## 📖 Documentation
 
-1. Create a file named `wallet_addresses.txt` with Ethereum addresses:
+### Running the Scraper
 
-```text
+1. Create input file:
+
+```bash
+# wallet_addresses.txt
 0x123...
 0x456...
 ```
 
-2. Run the scraper with different analysis modes:
+2. Run analysis:
 
-```python
+```bash
 # Portfolio Analysis
 python scraper.py PROMPT_WALLET_ADDRESS
 
 # Wallet Age Analysis
 python scraper.py WALLET_AGE
 
-# Transaction Pattern Analysis
+# Transaction Analysis
 python scraper.py TRANSACTIONS_PROMPT
 
-# Trend Analysis
-python scraper.py TREND_PROMPT
-
-# Behavioral Analysis (Bot vs Human)
+# Behavioral Analysis
 python scraper.py BEHAVIOR_PROMPT
 ```
 
-The scraper will:
-
-- Process each wallet address
-- Save data in the `etherscan_wallet_*` directory
-- Create separate files for each analysis type
-- Handle rate limiting automatically
-- Generate detailed reports for each wallet
-
-### Custom Browser Configuration
+### Browser Configuration
 
 ```python
 from browser_use.browser.browser import BrowserConfig
@@ -144,134 +117,106 @@ browser = CustomBrowser(
     config=BrowserConfig(
         headless=False,
         disable_security=True,
-        chrome_instance_path="/path/to/chrome", # Optional
-        extra_chromium_args=["--window-size=1920,1080"] # Optional
+        chrome_instance_path="/path/to/chrome"
     )
 )
 ```
 
-## Design Decisions
+## 🏗️ Architecture
 
-### Architecture
+```mermaid
+graph TD
+    A[Data Collection] --> B[Browser Automation]
+    B --> C[Data Processing]
+    C --> D[AI Analysis]
+    D --> E[Report Generation]
+```
 
-1. **Modular Design**
+- **Data Collection**: Etherscan scraping with rate limiting
+- **Browser Automation**: Playwright-based custom browser
+- **AI Analysis**: Multi-provider LLM integration
+- **Report Generation**: Customizable markdown reports
 
-   - Separate modules for data collection, analysis, and browser automation
-   - Clean separation between core functionality and UI components
-   - Extensible architecture for adding new analysis types
+## ⚠️ Limitations and Assumptions
 
-2. **Browser Automation**
-
-   - Uses Playwright for reliable web automation
-   - Custom browser management for persistent sessions
-   - Configurable browser settings for different use cases
-
-3. **AI Integration**
-   - Multiple LLM provider support
-   - Custom prompts for different analysis types
-   - Structured output formats for consistent results
-
-### Key Components
-
-- `EthereumWalletAnalyzer`: Core analysis engine
-- `CustomBrowser`: Enhanced browser automation
-- `AgentState`: State management for browser sessions
-- `DeepResearch`: Advanced research capabilities
-
-## Limitations and Assumptions
-
-### Limitations
+### Technical Limitations
 
 1. **Data Collection**
 
-   - Relies on Etherscan's web interface
-   - Rate limited by web scraping constraints
-   - May miss some transaction details due to pagination
+   - Limited to Etherscan's web interface
+   - Subject to rate limiting and IP blocks
+   - No direct blockchain node access
+   - Historical data may be incomplete
 
-2. **Analysis**
+2. **Browser Automation**
 
-   - Accuracy depends on LLM model quality
-   - May not capture complex trading patterns
-   - Limited historical data analysis
-
-3. **Browser Automation**
    - Requires Chrome browser
-   - May break with Etherscan UI changes
-   - Performance depends on network conditions
+   - Dependent on Etherscan's UI structure
+   - Limited concurrent sessions
+   - Memory-intensive for large datasets
 
-### Assumptions
+3. **Analysis Capabilities**
+   - LLM analysis quality varies by provider
+   - No real-time transaction monitoring
+   - Limited pattern recognition without ML
+   - Processing speed constraints
 
-1. **Wallet Activity**
+### Core Assumptions
 
-   - Assumes wallet addresses are valid Ethereum addresses
-   - Expects transactions to be visible on Etherscan
-   - Assumes standard ERC-20 token transactions
+1. **Data Availability**
+
+   - Wallet addresses are valid
+   - Transactions are publicly visible
+   - Etherscan remains accessible
+   - Standard ERC-20 token support
 
 2. **Environment**
 
-   - Assumes Python 3.11+ environment
-   - Expects Chrome browser installation
-   - Requires stable internet connection
+   - Stable internet connection
+   - Sufficient system resources
+   - Compatible Python version
+   - Required API keys available
 
-3. **API Access**
-   - Assumes valid API keys for LLM providers
-   - Expects rate limits to be respected
-   - Assumes Etherscan accessibility
+3. **Usage Patterns**
+   - Sequential wallet processing
+   - Standard browser configurations
+   - Reasonable request volumes
+   - English language content
 
-## Contributing
+## 🎯 Future Work
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+### Enhanced Analysis
 
-## Future Work
+- [ ] Cross-validation with multiple data sources
+- [ ] Layer 2 solution support
+- [ ] Historical price data integration
+- [ ] Machine learning pattern recognition
 
-### 1. Enhanced Data Accuracy
+### Robustness
 
-- Implement cross-validation with multiple data sources beyond Etherscan
-- Add support for Layer 2 solutions (Arbitrum, Optimism, etc.)
-- Develop methodology for historical price data integration
-- Create validation framework for wallet analysis results
-- Build automated tests for data accuracy verification
+- [ ] Comprehensive error handling
+- [ ] Smart rate limiting
+- [ ] Data validation framework
+- [ ] Automated testing suite
 
-### 2. Robust Error Handling
+### Documentation
 
-- Implement comprehensive exception handling for network failures
-- Add retry mechanisms with exponential backoff
-- Create detailed error logging and reporting system
-- Develop recovery mechanisms for interrupted analysis
-- Add validation for input data formats and wallet addresses
+- [ ] Technical documentation
+- [ ] Analysis methodology guides
+- [ ] Case studies
+- [ ] API documentation
 
-### 3. Documentation and Methodology
+## ⚠️ Limitations
 
-- Create detailed technical documentation for each analysis type
-- Document statistical methods and assumptions
-- Add case studies and example analyses
-- Create user guides for different user personas
-- Document best practices for custom analysis implementation
+- Relies on Etherscan web interface
+- Rate limited by web scraping constraints
+- Accuracy depends on LLM model quality
+- Requires Chrome browser
 
-### 4. Rate Limiting and Performance
+## 🤝 Contributing
 
-- Implement smart rate limiting with multiple API keys
-- Add caching layer for frequently accessed data
-- Develop batch processing for multiple wallets
-- Create queue system for large-scale analysis
-- Optimize browser automation performance
+Contributions welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
 
-### 5. Analysis Enhancement
-
-- Add machine learning models for pattern recognition
-- Implement sentiment analysis from on-chain data
-- Create visualization tools for analysis results
-- Add support for NFT transaction analysis
-- Develop real-time monitoring capabilities
-
-### 6. User Experience
-
-- Create interactive CLI interface
-- Develop web interface for analysis results
-- Add customizable report templates
-- Implement progress tracking for long-running analyses
-- Create API for programmatic access
-
-## License
+## 📜 License
 
 [MIT License](LICENSE)
