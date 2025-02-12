@@ -220,3 +220,8 @@ Contributions welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
 ## 📜 License
 
 [MIT License](LICENSE)
+
+## 🙏 Acknowledgments
+
+- [browser-use](https://github.com/browser-use/browser-use) for browser automation inspiration
+- [phidata](https://github.com/phidatahq/phidata) for project structure inspiration
