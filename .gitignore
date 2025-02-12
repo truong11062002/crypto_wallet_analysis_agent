@@ -43,3 +43,6 @@ reports/figures/*
 !data/processed/.gitkeep
 !reports/outputs/.gitkeep
 !reports/figures/.gitkeep
+
+src/web-ui/
+tmp/

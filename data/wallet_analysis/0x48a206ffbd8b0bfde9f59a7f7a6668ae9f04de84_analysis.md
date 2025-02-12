@@ -1,6 +1,7 @@
 # Analysis for 0x48a206ffbd8b0bfde9f59a7f7a6668ae9f04de84
 
 ### 1. Token Holdings
+
 - **ETH:** 0.0669 ETH
 - **BANK:** 2,307 BANK
 - **STRK:** 0.02811518 STRK
@@ -10,6 +11,7 @@
 - **NFTs:** Multiple items (Prices not found)
 
 ### 2. USD Values
+
 - **ETH:** $174.51
 - **BANK:** $2.40
 - **STRK:** $0.01
@@ -19,9 +21,11 @@
 - **NFTs:** $0.00 (Prices not found)
 
 ### 3. Total Portfolio Value
+
 - **Total USD Value:** $176.92
 
 ### 4. Asset Distribution
+
 - **ETH:** 98.64%
 - **BANK:** 1.36%
 - **STRK:** 0.01%

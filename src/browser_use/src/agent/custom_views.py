@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import Type
 
+from pydantic import BaseModel, ConfigDict, Field, create_model
+
 from browser_use.agent.views import AgentOutput
 from browser_use.controller.registry.views import ActionModel
-from pydantic import BaseModel, ConfigDict, Field, create_model
 
 
 @dataclass
@@ -18,7 +19,7 @@ class CustomAgentStepInfo:
 
 
 class CustomAgentBrain(BaseModel):
-    """Current state of the agent"""
+    """Current state of the agent."""
 
     prev_action_evaluation: str
     important_contents: str
@@ -29,7 +30,7 @@ class CustomAgentBrain(BaseModel):
 
 
 class CustomAgentOutput(AgentOutput):
-    """Output model for agent
+    """Output model for agent.
 
     @dev note: this model is extended with custom actions in AgentService. You can also use some fields that are not in this model as provided by the linter, as long as they are registered in the DynamicActions model.
     """
@@ -43,7 +44,7 @@ class CustomAgentOutput(AgentOutput):
     def type_with_custom_actions(
         custom_actions: Type[ActionModel],
     ) -> Type["CustomAgentOutput"]:
-        """Extend actions with custom actions"""
+        """Extend actions with custom actions."""
         return create_model(
             "CustomAgentOutput",
             __base__=CustomAgentOutput,

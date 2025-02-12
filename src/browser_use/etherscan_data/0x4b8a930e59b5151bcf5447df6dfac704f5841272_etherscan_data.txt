@@ -1,7 +1,7 @@
 Wallet Address: 0x4b8a930e59b5151bcf5447df6dfac704f5841272
 
 --- Final Result ---
-I have extracted the token holdings, their USD values, and the total portfolio USD value. The asset percentage distribution is also available in the extracted content. 
+I have extracted the token holdings, their USD values, and the total portfolio USD value. The asset percentage distribution is also available in the extracted content.
 
 Here's a summary:
 

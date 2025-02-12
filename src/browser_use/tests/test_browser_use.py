@@ -13,7 +13,6 @@ from pprint import pprint
 
 from browser_use import Agent
 from browser_use.agent.views import AgentHistoryList
-
 from src.utils import utils
 
 
@@ -31,13 +30,12 @@ async def test_browser_use_org():
     #     base_url=os.getenv("AZURE_OPENAI_ENDPOINT", ""),
     #     api_key=os.getenv("AZURE_OPENAI_API_KEY", ""),
     # )
-
     # llm = utils.get_llm_model(
     #     provider="deepseek",
     #     model_name="deepseek-chat",
     #     temperature=0.8
     # )
-    
+
     llm = utils.get_llm_model(
         provider="ollama", model_name="deepseek-r1:14b", temperature=0.5
     )
@@ -51,7 +49,7 @@ async def test_browser_use_org():
             chrome_path = None
     else:
         chrome_path = None
-        
+
     tool_calling_method = "json_schema"  # setting to json_schema when using ollma
 
     browser = Browser(
@@ -77,7 +75,7 @@ async def test_browser_use_org():
             llm=llm,
             browser_context=browser_context,
             use_vision=use_vision,
-            tool_calling_method=tool_calling_method
+            tool_calling_method=tool_calling_method,
         )
         history: AgentHistoryList = await agent.run(max_steps=10)
 
@@ -98,18 +96,16 @@ async def test_browser_use_org():
 
 
 async def test_browser_use_custom():
-    from browser_use.browser.context import BrowserContextWindowSize
     from browser_use.browser.browser import BrowserConfig
-    from playwright.async_api import async_playwright
-
+    from browser_use.browser.context import BrowserContextWindowSize
     from src.agent.custom_agent import CustomAgent
-    from src.agent.custom_prompts import CustomSystemPrompt, CustomAgentMessagePrompt
+    from src.agent.custom_prompts import CustomAgentMessagePrompt, CustomSystemPrompt
     from src.browser.custom_browser import CustomBrowser
     from src.browser.custom_context import BrowserContextConfig
     from src.controller.custom_controller import CustomController
 
     window_w, window_h = 1920, 1080
-    
+
     # llm = utils.get_llm_model(
     #     provider="openai",
     #     model_name="gpt-4o",
@@ -138,7 +134,7 @@ async def test_browser_use_custom():
     #     model_name="deepseek-reasoner",
     #     temperature=0.8
     # )
-    
+
     # llm = utils.get_llm_model(
     #     provider="deepseek",
     #     model_name="deepseek-chat",
@@ -148,7 +144,7 @@ async def test_browser_use_custom():
     # llm = utils.get_llm_model(
     #     provider="ollama", model_name="qwen2.5:7b", temperature=0.5
     # )
-    
+
     # llm = utils.get_llm_model(
     #     provider="ollama", model_name="deepseek-r1:14b", temperature=0.5
     # )
@@ -157,7 +153,7 @@ async def test_browser_use_custom():
     use_own_browser = True
     disable_security = True
     use_vision = False  # Set to False when using DeepSeek
-    
+
     max_actions_per_step = 1
     playwright = None
     browser = None
@@ -202,7 +198,7 @@ async def test_browser_use_custom():
             system_prompt_class=CustomSystemPrompt,
             agent_prompt_class=CustomAgentMessagePrompt,
             use_vision=use_vision,
-            max_actions_per_step=max_actions_per_step
+            max_actions_per_step=max_actions_per_step,
         )
         history: AgentHistoryList = await agent.run(max_steps=100)
 
@@ -233,20 +229,15 @@ async def test_browser_use_custom():
             await playwright.stop()
         if browser:
             await browser.close()
-            
+
+
 async def test_browser_use_parallel():
-    from browser_use.browser.context import BrowserContextWindowSize
-    from browser_use.browser.browser import BrowserConfig
-    from playwright.async_api import async_playwright
-    from browser_use.browser.browser import Browser
-    from src.agent.custom_agent import CustomAgent
-    from src.agent.custom_prompts import CustomSystemPrompt, CustomAgentMessagePrompt
-    from src.browser.custom_browser import CustomBrowser
+    from browser_use.browser.browser import Browser, BrowserConfig
     from src.browser.custom_context import BrowserContextConfig
     from src.controller.custom_controller import CustomController
 
     window_w, window_h = 1920, 1080
-    
+
     # llm = utils.get_llm_model(
     #     provider="openai",
     #     model_name="gpt-4o",
@@ -267,7 +258,7 @@ async def test_browser_use_parallel():
         provider="gemini",
         model_name="gemini-2.0-flash-exp",
         temperature=1.0,
-        api_key=os.getenv("GOOGLE_API_KEY", "")
+        api_key=os.getenv("GOOGLE_API_KEY", ""),
     )
 
     # llm = utils.get_llm_model(
@@ -275,7 +266,7 @@ async def test_browser_use_parallel():
     #     model_name="deepseek-reasoner",
     #     temperature=0.8
     # )
-    
+
     # llm = utils.get_llm_model(
     #     provider="deepseek",
     #     model_name="deepseek-chat",
@@ -285,7 +276,7 @@ async def test_browser_use_parallel():
     # llm = utils.get_llm_model(
     #     provider="ollama", model_name="qwen2.5:7b", temperature=0.5
     # )
-    
+
     # llm = utils.get_llm_model(
     #     provider="ollama", model_name="deepseek-r1:14b", temperature=0.5
     # )
@@ -294,28 +285,30 @@ async def test_browser_use_parallel():
     use_own_browser = True
     disable_security = True
     use_vision = True  # Set to False when using DeepSeek
-    
+
     max_actions_per_step = 1
     playwright = None
     browser = None
     browser_context = None
-    
+
     browser = Browser(
         config=BrowserConfig(
             disable_security=True,
             headless=False,
-            new_context_config=BrowserContextConfig(save_recording_path='./tmp/recordings'),
+            new_context_config=BrowserContextConfig(
+                save_recording_path="./tmp/recordings"
+            ),
         )
     )
 
     try:
         agents = [
-		Agent(task=task, llm=llm, browser=browser)
+            Agent(task=task, llm=llm, browser=browser)
             for task in [
-                'Search Google for weather in Tokyo',
-                'Check Reddit front page title',
-                '大S去世',
-                'Find NASA image of the day',
+                "Search Google for weather in Tokyo",
+                "Check Reddit front page title",
+                "大S去世",
+                "Find NASA image of the day",
                 # 'Check top story on CNN',
                 # 'Search latest SpaceX launch date',
                 # 'Look up population of Paris',
@@ -354,6 +347,7 @@ async def test_browser_use_parallel():
             await playwright.stop()
         if browser:
             await browser.close()
+
 
 if __name__ == "__main__":
     # asyncio.run(test_browser_use_org())

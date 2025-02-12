@@ -15,6 +15,6 @@
 
 ## 4. Asset Distribution
 
-- Ethereum: 100% 
+- Ethereum: 100%
 
 (Note: The NFT, Sipher NEKO, is not included in the percentage distribution as no USD valuation was provided for it.)

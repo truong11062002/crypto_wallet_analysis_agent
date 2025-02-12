@@ -1,20 +1,18 @@
-import pdb
+from datetime import datetime
 from typing import List, Optional
 
-from browser_use.agent.prompts import SystemPrompt, AgentMessagePrompt
-from browser_use.agent.views import ActionResult, ActionModel
-from browser_use.browser.views import BrowserState
 from langchain_core.messages import HumanMessage, SystemMessage
-from datetime import datetime
+
+from browser_use.agent.prompts import AgentMessagePrompt, SystemPrompt
+from browser_use.agent.views import ActionModel, ActionResult
+from browser_use.browser.views import BrowserState
 
 from .custom_views import CustomAgentStepInfo
 
 
 class CustomSystemPrompt(SystemPrompt):
     def important_rules(self) -> str:
-        """
-        Returns the important rules for the agent.
-        """
+        """Returns the important rules for the agent."""
         text = r"""
     1. RESPONSE FORMAT: You must ALWAYS respond with valid JSON in this exact format:
        {
@@ -27,11 +25,11 @@ class CustomSystemPrompt(SystemPrompt):
            "summary": "Please generate a brief natural language description for the operation in next actions based on your Thought."
          },
          "action": [
-           * actions in sequences, please refer to **Common action sequences**. Each output action MUST be formated as: \{action_name\: action_params\}* 
+           * actions in sequences, please refer to **Common action sequences**. Each output action MUST be formated as: \{action_name\: action_params\}*
          ]
        }
 
-    2. ACTIONS: You can specify multiple actions to be executed in sequence. 
+    2. ACTIONS: You can specify multiple actions to be executed in sequence.
 
        Common action sequences:
        - Form filling: [
@@ -75,13 +73,13 @@ class CustomSystemPrompt(SystemPrompt):
        - If you fill an input field and your action sequence is interrupted, most often a list with suggestions poped up under the field and you need to first select the right element from the suggestion list.
 
     8. ACTION SEQUENCING:
-       - Actions are executed in the order they appear in the list 
+       - Actions are executed in the order they appear in the list
        - Each action should logically follow from the previous one
        - If the page changes after an action, the sequence is interrupted and you get the new state.
        - If content only disappears the sequence continues.
        - Only provide the action sequence until you think the page will change.
        - Try to be efficient, e.g. fill forms at once, or chain actions where nothing changes on the page like saving, extracting, checkboxes...
-       - only use multiple actions if it makes sense. 
+       - only use multiple actions if it makes sense.
     """
         text += f"   - use maximum {self.max_actions_per_step} actions per sequence"
         return text
@@ -111,8 +109,7 @@ class CustomSystemPrompt(SystemPrompt):
     """
 
     def get_system_message(self) -> SystemMessage:
-        """
-        Get the system prompt for the agent.
+        """Get the system prompt for the agent.
 
         Returns:
             str: Formatted system prompt
@@ -120,7 +117,7 @@ class CustomSystemPrompt(SystemPrompt):
         AGENT_PROMPT = f"""You are a precise browser automation agent that interacts with websites through structured commands. Your role is to:
     1. Analyze the provided webpage elements and structure
     2. Plan a sequence of actions to accomplish the given task
-    3. Your final result MUST be a valid JSON as the **RESPONSE FORMAT** described, containing your action sequence and state assessment, No need extra content to expalin. 
+    3. Your final result MUST be a valid JSON as the **RESPONSE FORMAT** described, containing your action sequence and state assessment, No need extra content to expalin.
 
     {self.input_format()}
 
@@ -135,58 +132,57 @@ class CustomSystemPrompt(SystemPrompt):
 
 class CustomAgentMessagePrompt(AgentMessagePrompt):
     def __init__(
-            self,
-            state: BrowserState,
-            actions: Optional[List[ActionModel]] = None,
-            result: Optional[List[ActionResult]] = None,
-            include_attributes: list[str] = [],
-            max_error_length: int = 400,
-            step_info: Optional[CustomAgentStepInfo] = None,
+        self,
+        state: BrowserState,
+        actions: Optional[List[ActionModel]] = None,
+        result: Optional[List[ActionResult]] = None,
+        include_attributes: list[str] = [],
+        max_error_length: int = 400,
+        step_info: Optional[CustomAgentStepInfo] = None,
     ):
-        super(CustomAgentMessagePrompt, self).__init__(state=state, 
-                                                       result=result, 
-                                                       include_attributes=include_attributes, 
-                                                       max_error_length=max_error_length, 
-                                                       step_info=step_info
-                                                       )
+        super().__init__(
+            state=state,
+            result=result,
+            include_attributes=include_attributes,
+            max_error_length=max_error_length,
+            step_info=step_info,
+        )
         self.actions = actions
 
     def get_user_message(self) -> HumanMessage:
         if self.step_info:
-            step_info_description = f'Current step: {self.step_info.step_number}/{self.step_info.max_steps}\n'
+            step_info_description = f"Current step: {self.step_info.step_number}/{self.step_info.max_steps}\n"
         else:
-            step_info_description = ''
-            
+            step_info_description = ""
+
         time_str = datetime.now().strftime("%Y-%m-%d %H:%M")
         step_info_description += f"Current date and time: {time_str}"
 
-        elements_text = self.state.element_tree.clickable_elements_to_string(include_attributes=self.include_attributes)
+        elements_text = self.state.element_tree.clickable_elements_to_string(
+            include_attributes=self.include_attributes
+        )
 
         has_content_above = (self.state.pixels_above or 0) > 0
         has_content_below = (self.state.pixels_below or 0) > 0
 
-        if elements_text != '':
+        if elements_text != "":
             if has_content_above:
-                elements_text = (
-                    f'... {self.state.pixels_above} pixels above - scroll or extract content to see more ...\n{elements_text}'
-                )
+                elements_text = f"... {self.state.pixels_above} pixels above - scroll or extract content to see more ...\n{elements_text}"
             else:
-                elements_text = f'[Start of page]\n{elements_text}'
+                elements_text = f"[Start of page]\n{elements_text}"
             if has_content_below:
-                elements_text = (
-                    f'{elements_text}\n... {self.state.pixels_below} pixels below - scroll or extract content to see more ...'
-                )
+                elements_text = f"{elements_text}\n... {self.state.pixels_below} pixels below - scroll or extract content to see more ..."
             else:
-                elements_text = f'{elements_text}\n[End of page]'
+                elements_text = f"{elements_text}\n[End of page]"
         else:
-            elements_text = 'empty page'
-   
+            elements_text = "empty page"
+
         state_description = f"""
 {step_info_description}
-1. Task: {self.step_info.task}. 
-2. Hints(Optional): 
+1. Task: {self.step_info.task}.
+2. Hints(Optional):
 {self.step_info.add_infos}
-3. Memory: 
+3. Memory:
 {self.step_info.memory}
 4. Current url: {self.state.url}
 5. Available tabs:
@@ -197,7 +193,7 @@ class CustomAgentMessagePrompt(AgentMessagePrompt):
 
         if self.actions and self.result:
             state_description += "\n **Previous Actions** \n"
-            state_description += f'Previous step: {self.step_info.step_number-1}/{self.step_info.max_steps} \n'
+            state_description += f"Previous step: {self.step_info.step_number-1}/{self.step_info.max_steps} \n"
             for i, result in enumerate(self.result):
                 action = self.actions[i]
                 state_description += f"Previous action {i + 1}/{len(self.result)}: {action.model_dump_json(exclude_unset=True)}\n"
@@ -206,10 +202,8 @@ class CustomAgentMessagePrompt(AgentMessagePrompt):
                         state_description += f"Result of previous action {i + 1}/{len(self.result)}: {result.extracted_content}\n"
                     if result.error:
                         # only use last 300 characters of error
-                        error = result.error[-self.max_error_length:]
-                        state_description += (
-                            f"Error of previous action {i + 1}/{len(self.result)}: ...{error}\n"
-                        )
+                        error = result.error[-self.max_error_length :]
+                        state_description += f"Error of previous action {i + 1}/{len(self.result)}: ...{error}\n"
 
         if self.state.screenshot:
             # Format message for vision model

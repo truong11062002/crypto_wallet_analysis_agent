@@ -3,6 +3,7 @@
 ## Ethereum Wallet Analysis
 
 ### Wallet Address
+
 - `0x2360b27cd5e9c0a2a6907665a518bf12fac0eaee`
 
 ### 1. Token Holdings

@@ -3,6 +3,7 @@
 ## Analysis of Wallet: 0x16302b5dbd27cc340c8228fcbf9aa14e8ecdc660
 
 ### 1. Token Holdings
+
 - **Ethereum (ETH)**: 0.2017
 - **Prosper (PROS)**: 46.90901
 - **Antimatter.Finance Mapping Token (MATTER)**: 144
@@ -12,11 +13,13 @@
 - **Sipher NEKO (NEKO)**: 5 (Price not found, NFT)
 
 ### 2. USD Values
+
 - **Ethereum (ETH)**: $2,611.41 per ETH
 - **Prosper (PROS)**: $0.3755 per PROS
 - **Antimatter.Finance Mapping Token (MATTER)**: $0.0007 per MATTER
 
 ### 3. Total Portfolio Value
+
 - **Ethereum (ETH)**: $526.75
 - **Prosper (PROS)**: $17.61
 - **Antimatter.Finance Mapping Token (MATTER)**: $0.10
@@ -24,6 +27,7 @@
 - **Total Portfolio Value (excluding NFTs and tokens with no price)**: **$544.46**
 
 ### 4. Asset Distribution
+
 - **Ethereum (ETH)**: 96.75%
 - **Prosper (PROS)**: 3.23%
 - **Antimatter.Finance Mapping Token (MATTER)**: 0.02%

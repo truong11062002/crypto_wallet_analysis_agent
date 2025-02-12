@@ -1,5 +1,4 @@
 import asyncio
-import os
 from pathlib import Path
 from typing import List
 
@@ -9,7 +8,7 @@ from src.analyzer import EthereumWalletAnalyzer
 async def read_wallet_addresses(file_path: str) -> List[str]:
     """Read wallet addresses from a file."""
     try:
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             return [addr.strip() for addr in f.readlines() if addr.strip()]
     except FileNotFoundError:
         print(f"Error: Wallet addresses file not found at {file_path}")
@@ -20,12 +19,19 @@ async def read_wallet_addresses(file_path: str) -> List[str]:
 
 
 async def analyze_wallets(
-    addresses: List[str], output_dir: str = "data/wallet_analysis"
+    addresses: List[str],
+    output_dir: str = "data/wallet_analysis",
+    analyze_age: bool = False,
 ):
     """Analyze multiple wallet addresses."""
 
     # Initialize analyzer
-    analyzer = EthereumWalletAnalyzer(data_dir="src/web-ui/etherscan_data")
+    data_dir = (
+        "src/browser_use/etherscan_wallet_age"
+        if analyze_age
+        else "src/browser_use/etherscan_data"
+    )
+    analyzer = EthereumWalletAnalyzer(data_dir=data_dir)
 
     # Create output directory if it doesn't exist
     Path(output_dir).mkdir(parents=True, exist_ok=True)
@@ -37,11 +43,14 @@ async def analyze_wallets(
             print(f"\nAnalyzing wallet: {address}")
 
             # Get analysis for this wallet
-            data = analyzer.read_wallet_data(
-                Path(f"src/web-ui/etherscan_data/{address}_etherscan_data.txt")
-            )
+            data_file = Path(f"{data_dir}/{address}_etherscan_data.txt")
+            data = analyzer.read_wallet_data(data_file)
             if data:
-                analysis = analyzer.analyze_single_wallet(data)
+                analysis = (
+                    analyzer.analyze_wallets_age(data)
+                    if analyze_age
+                    else analyzer.analyze_single_wallet(data)
+                )
                 results[address] = analysis
                 print(f"Analysis complete for {address}")
             else:
@@ -66,8 +75,8 @@ async def main():
     """Main entry point for the wallet analysis program."""
 
     # Configuration
-    WALLET_FILE = "src/web-ui/wallet_addresses.txt"
-    OUTPUT_DIR = "data/wallet_analysis"
+    WALLET_FILE = "src/browser_use/wallet_addresses.txt"
+    OUTPUT_DIR = "data/wallet_age_analysis"
 
     print("Starting Ethereum Wallet Analysis...")
 
@@ -80,7 +89,7 @@ async def main():
     print(f"Found {len(addresses)} wallet addresses to analyze")
 
     # Run analysis
-    await analyze_wallets(addresses, OUTPUT_DIR)
+    await analyze_wallets(addresses, OUTPUT_DIR, analyze_age=True)
 
     print("\nAnalysis complete!")
 

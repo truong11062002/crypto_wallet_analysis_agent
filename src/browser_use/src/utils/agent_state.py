@@ -1,16 +1,17 @@
 import asyncio
 
+
 class AgentState:
     _instance = None
 
     def __init__(self):
-        if not hasattr(self, '_stop_requested'):
+        if not hasattr(self, "_stop_requested"):
             self._stop_requested = asyncio.Event()
             self.last_valid_state = None  # store the last valid browser state
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(AgentState, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
         return cls._instance
 
     def request_stop(self):

@@ -3,6 +3,7 @@
 Here's the analysis of the Ethereum wallet 0x41d68f4f1cd59abfbc650ade13f7f21979ce0f2e:
 
 ### 1. Token Holdings
+
 - **BNB (on BSC Chain):** 0.01286 BNB
 - **Chain Games (CHAIN):** 331.436322 CHAIN
 - **COLLAB (on Optimism):** 248.672566 COLLAB
@@ -15,6 +16,7 @@ Here's the analysis of the Ethereum wallet 0x41d68f4f1cd59abfbc650ade13f7f21979c
   - RC-Nitro (RCN) x3
 
 ### 2. USD Values
+
 - **BNB (on BSC Chain):** $8.17
 - **Chain Games (CHAIN):** $4.05
 - **COLLAB (on Optimism):** $0.11
@@ -22,9 +24,11 @@ Here's the analysis of the Ethereum wallet 0x41d68f4f1cd59abfbc650ade13f7f21979c
 - *No USD values available for NFT tokens.*
 
 ### 3. Total Portfolio Value
+
 - **Total USD Value:** $12.33
 
 ### 4. Asset Distribution
+
 - **BNB (on BSC Chain):** 66.25%
 - **Chain Games (CHAIN):** 32.84%
 - **COLLAB (on Optimism):** 0.91%

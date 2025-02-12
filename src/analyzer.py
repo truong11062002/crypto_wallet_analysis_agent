@@ -28,10 +28,23 @@ class EthereumWalletAnalyzer:
             markdown=True,
         )
 
+        self.agent_wallet_age = Agent(
+            model=OpenAIChat(id="gpt-4o"),
+            description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
+            instructions=[
+                "Extract and format wallet data into clear sections:",
+                "First Transaction: YYYY-MM-DD",
+                "Wallet Age: X years, Y months, Z days",
+                "Category: [Category]",
+                "Analysis: [Brief interpretation]",
+                "Make sure all numbers are properly formatted with appropriate decimals.",
+            ],
+        )
+
     def read_wallet_data(self, file_path: Path) -> str:
         """Read wallet data from a text file."""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 return f.read()
         except Exception as e:
             print(f"Error reading file {file_path}: {e}")
@@ -47,20 +60,36 @@ class EthereumWalletAnalyzer:
         """Analyze data for a single wallet using the agent."""
         prompt = f"""
         Analyze this wallet data and format it into sections:
-        
+
         {wallet_data}
-        
+
         Format the output with these exact sections:
         1. Token Holdings
         2. USD Values
         3. Total Portfolio Value
         4. Asset Distribution
-        
+
         Make sure all numbers are properly formatted with appropriate decimals.
         Sort tokens by USD value from highest to lowest.
         """
 
         response = self.agent.run(prompt)
+        return response.content if response.content else "No analysis available"
+
+    def analyze_wallets_age(self, wallet_address: str) -> str:
+        """Analyze wallet age using the agent."""
+        prompt = f"""
+        Analyze the wallet age of {wallet_address} using the following information:
+
+        First Transaction: YYYY-MM-DD
+        Wallet Age: X years, Y months, Z days
+        Category: [Category]
+        Analysis: [Brief interpretation]
+
+        Make sure all numbers are properly formatted with appropriate decimals.
+        """
+
+        response = self.agent_wallet_age.run(prompt)
         return response.content if response.content else "No analysis available"
 
     def analyze_all_wallets(self) -> Dict[str, str]:

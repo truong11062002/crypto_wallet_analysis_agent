@@ -1,4 +1,3 @@
-
 # API Specifications
 
 ## Blockchain APIs
@@ -10,6 +9,7 @@ Base URL: https://api.etherscan.io/api
 #### Endpoints
 
 1. Get Wallet Balance
+
 ```
 GET /api
     ?module=account
@@ -19,6 +19,7 @@ GET /api
 ```
 
 2. Get Token Transfers
+
 ```
 GET /api
     ?module=account

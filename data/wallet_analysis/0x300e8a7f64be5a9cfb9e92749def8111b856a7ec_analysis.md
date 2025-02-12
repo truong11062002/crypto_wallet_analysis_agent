@@ -17,7 +17,7 @@ To properly analyze and format the wallet data, I'll need more specific informat
 - **Tether (USDT):** $500.00
 - **Binance Coin (BNB):** $820.00
 - **Uniswap (UNI):** $120.00
-  
+
 ### 3. Total Portfolio Value
 
 - **Total USD Value:** $11,940.00

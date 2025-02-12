@@ -45,6 +45,6 @@
 
 *(Some token values and percentages are estimated based on available data.)*
 
----
+______________________________________________________________________
 
 *Note: Prices and values for some tokens, especially NFTs, could not be automatically determined.*

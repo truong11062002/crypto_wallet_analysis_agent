@@ -3,6 +3,7 @@
 Here's the analysis of the Ethereum wallet's cryptocurrency portfolio:
 
 **1. Token Holdings:**
+
 - Sipher Token (SIPHER): 5,733.47996944 SIPHER
 - ETH: 0.005885728013203787 ETH
 - Escrowed Illuvium (sILV2): 0 sILV2
@@ -14,6 +15,7 @@ Here's the analysis of the Ethereum wallet's cryptocurrency portfolio:
 - Various other NFTs: Call of Duty Mint Passes, Clipper Reward, DAEA Mint Pass Originals, EON Ancients, galatoken.io, The Witcher Art Mint Pass, ZuckBots
 
 **2. USD Values:**
+
 - Sipher Token (SIPHER): $523.39
 - ETH: $15.37
 - Escrowed Illuvium (sILV2): $0.00
@@ -21,9 +23,11 @@ Here's the analysis of the Ethereum wallet's cryptocurrency portfolio:
 - Gala: $0.00 (Price not available)
 
 **3. Total Portfolio Value:**
+
 - Total excluding NFTs and GALA: $538.76
 
 **4. Asset Distribution:**
+
 - Sipher Token (SIPHER): 97.15%
 - ETH: 2.85%
 - Escrowed Illuvium (sILV2): 0.00%
