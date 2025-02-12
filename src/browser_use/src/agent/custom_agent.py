@@ -69,8 +69,9 @@ class CustomAgent(Agent):
         agent_state: AgentState = None,
         initial_actions: Optional[List[Dict[str, Dict[str, Any]]]] = None,
         # Cloud Callbacks
-        register_new_step_callback: Callable[["BrowserState", "AgentOutput", int], None]
-        | None = None,
+        register_new_step_callback: (
+            Callable[["BrowserState", "AgentOutput", int], None] | None
+        ) = None,
         register_done_callback: Callable[["AgentHistoryList"], None] | None = None,
         tool_calling_method: Optional[str] = "auto",
     ):
@@ -298,9 +299,11 @@ class CustomAgent(Agent):
                     step=self.n_steps,
                     actions=actions,
                     consecutive_failures=self.consecutive_failures,
-                    step_error=[r.error for r in result if r.error]
-                    if result
-                    else ["No result"],
+                    step_error=(
+                        [r.error for r in result if r.error]
+                        if result
+                        else ["No result"]
+                    ),
                 )
             )
             if not result:
