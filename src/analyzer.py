@@ -13,6 +13,7 @@ class EthereumWalletAnalyzer:
         self.data_dir = Path(data_dir)
 
         # Initialize the agent with specific instructions for analyzing wallet data
+        # TODO: Agent that uses structured outputs
         self.agent = Agent(
             model=OpenAIChat(id="gpt-4o"),
             description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
@@ -28,6 +29,7 @@ class EthereumWalletAnalyzer:
             markdown=True,
         )
 
+        # TODO: Agent that uses structured outputs
         self.agent_wallet_age = Agent(
             model=OpenAIChat(id="gpt-4o"),
             description="You are a cryptocurrency wallet analysis expert that specializes in interpreting and formatting wallet data.",
