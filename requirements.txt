@@ -1,0 +1,13 @@
+agno
+openai
+duckduckgo-search
+lancedb
+browser-use==0.1.29
+pyperclip==1.9.0
+gradio==5.10.0
+json-repair
+langchain-mistralai==0.2.4
+PyYAML
+aiohttp
+web3
+yfinance
