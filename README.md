@@ -79,6 +79,12 @@ OPENAI_API_KEY=your_key_here
 GOOGLE_API_KEY=your_key_here
 ```
 
+### Export environment variables
+
+```bash
+export OPENAI_API_KEY=sk-xxxx
+```
+
 ## 📖 Documentation
 
 ### Running the Scraper
