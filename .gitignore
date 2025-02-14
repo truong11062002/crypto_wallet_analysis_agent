@@ -28,6 +28,7 @@ ENV/
 # IDE
 .idea/
 .vscode/
+.specstory/
 *.swp
 *.swo
 
